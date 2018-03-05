@@ -44,11 +44,15 @@ sendUpdateMember = function () {
     headers: header
   };
   rp(options).then(function (body) {
-      // console.log(body);
+      console.log("hellow ----1");
+      console.log(body);
 
 
       var xml = body;
       parseString(xml, function (err, result) {
+        console.log("hellow ----2");
+
+        console.log(result);
         console.log("-----Edit");
         console.dir(JSON.stringify(result));
         return JSON.stringify(result);
