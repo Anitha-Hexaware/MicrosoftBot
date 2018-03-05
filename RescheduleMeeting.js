@@ -9,7 +9,7 @@ var header = {
   'Cache-Control': 'no-cache'
 }
 
-sendUpdateMember = function (a, session) {
+sendUpdateMember = function () {
   var options = {
     method: 'POST',
     uri: 'https://apidemoeu.webex.com/WBXService/XMLService',
@@ -22,7 +22,7 @@ sendUpdateMember = function (a, session) {
         </securityContext>\r\n </header>\r\n
       <body>\r\n
         <bodyContent\r\n xsi:type="java:com.webex.service.binding.meeting.SetMeeting">\r\n
-          <meetingkey>${a}</meetingkey>\r\n
+          <meetingkey>${UpdateMeetingKey}</meetingkey>\r\n
           <participants>\r\n
             <attendees>\r\n
               <attendee>\r\n
