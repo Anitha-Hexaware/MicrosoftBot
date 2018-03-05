@@ -2,7 +2,7 @@
 var request = require("request");
 var rp = require('request-promise');
 var parseString = require('xml2js').parseString;
-let UpdateMeetingKey = 625204197;
+let UpdateMeetingKey = 620373909;
 // -------------------------------------------------------------
 var header = {
   'Postman-Token': '3c47290a-2141-ae22-5744-16d21de134c3',
@@ -13,33 +13,36 @@ sendUpdateMember = function () {
   var options = {
     method: 'POST',
     uri: 'https://apidemoeu.webex.com/WBXService/XMLService',
-    body: `<serv:message xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">\r\n
-      <header>\r\n
-        <securityContext>\r\n
-          <webExID>NuanceWebex</webExID>\r\n
-          <password>nuance123</password>\r\n
-          <siteName>apidemoeu</siteName>\r\n
-        </securityContext>\r\n </header>\r\n
-      <body>\r\n
-        <bodyContent\r\n xsi:type="java:com.webex.service.binding.meeting.SetMeeting">\r\n
-          <meetingkey>${UpdateMeetingKey}</meetingkey>\r\n
-          <participants>\r\n
-            <attendees>\r\n
-              <attendee>\r\n
-                <person>\r\n
-                  <email>hani10.zenith@gmail.com</email>\r\n
-                </person>\r\n </attendee>\r\n
-              <attendee>\r\n
-                <person>\r\n
-                  <email>sandeepkumarboda444@gmail.com</email>\r\n
-                </person>\r\n </attendee>\r\n </attendees>\r\n </participants>\r\n
-          <attendeeOptions>\r\n
-            <emailInvitations>true</emailInvitations>\r\n </attendeeOptions>\r\n
-          <schedule>\r\n
-            <openTime>300</openTime>\r\n 
-            </schedule>\r\n 
-            </bodyContent>\r\n </body>\r\n
-            </serv:message>`,
+    body: `<serv:message xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <header>
+      <securityContext>
+        <webExID>test_user</webExID>
+        <password>cisco!123</password>
+        <siteName>apidemoeu</siteName>
+      </securityContext>
+    </header>
+    <body>
+      <bodyContent
+        xsi:type="java:com.webex.service.binding.meeting.SetMeeting">
+        <meetingkey>${UpdateMeetingKey}</meetingkey>
+        <participants>
+          <attendees>
+            <attendee>
+              <person>
+                <email>jdoe@email.com</email>
+              </person>
+            </attendee>
+          </attendees>
+        </participants>
+        <attendeeOptions>
+          <emailInvitations>true</emailInvitations>
+        </attendeeOptions>
+        <schedule>
+          <openTime>300</openTime>
+        </schedule>
+      </bodyContent>
+    </body>
+  </serv:message>`,
     json: true, // Automatically stringifies the body to JSON
     headers: header
   };
