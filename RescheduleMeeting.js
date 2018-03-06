@@ -1,15 +1,18 @@
 //Bot function Editing by anitha
 var request = require("request");
 var rp = require('request-promise');
-var parseString = require('xml2js').parseString;
+// var parseString = require('xml2js').parseString;
+const XmlReader = require('xml-reader');
+const xmlQuery = require('xml-query');
 let UpdateMeetingKey = 620373909;
+
 // -------------------------------------------------------------
 var header = {
   'Postman-Token': '3c47290a-2141-ae22-5744-16d21de134c3',
   'Cache-Control': 'no-cache'
 }
 
-sendUpdateMember = function () {
+sendUpdateMember = function (a,arrList) {
   var options = {
     method: 'POST',
     uri: 'https://apidemoeu.webex.com/WBXService/XMLService',
@@ -24,14 +27,10 @@ sendUpdateMember = function () {
     <body>
       <bodyContent
         xsi:type="java:com.webex.service.binding.meeting.SetMeeting">
-        <meetingkey>${UpdateMeetingKey}</meetingkey>
+        <meetingkey>${a}</meetingkey>
         <participants>
           <attendees>
-            <attendee>
-              <person>
-                <email>jdoe@email.com</email>
-              </person>
-            </attendee>
+            ${arrList}
           </attendees>
         </participants>
         <attendeeOptions>
@@ -43,24 +42,19 @@ sendUpdateMember = function () {
       </bodyContent>
     </body>
   </serv:message>`,
-    json: true, // Automatically stringifies the body to JSON
     headers: header
   };
-  rp(options).then(function (body) {
-      console.log("hellow ----1");
+  rp(options).then(function (body,request) {
+    // console.log(request);
+      console.log("-----------------boddy xml");
       console.log(body);
+      var xmlSend = body;
 
+      const astSend = XmlReader.parseSync(xmlSend);
+      const xqSend = xmlQuery(astSend);
 
-      var xml = body;
-      parseString(xml, function (err, result) {
-        console.log("hellow ----2");
-
-        console.log(result);
-        console.log("-----Edit");
-        console.dir(JSON.stringify(result));
-        return JSON.stringify(result);
-
-      });
+      var meetingResultX = xmlQuery(astSend).find('serv:result').text();
+      console.log(`The meeting is created successfull ${meetingResultX}`);
 
     })
     .catch(function (err) {
@@ -69,8 +63,8 @@ sendUpdateMember = function () {
       return err;
     });
 }
-
-GetUpdateMember = function (session) {
+// -------------------------------------------------
+getUpdateMember = function (a) {
   var options = {
     method: 'POST',
     uri: 'https://apidemoeu.webex.com/WBXService/XMLService',
@@ -85,25 +79,32 @@ GetUpdateMember = function (session) {
     <body>
       <bodyContent
         xsi:type="java:com.webex.service.binding.meeting.LstsummaryMeeting">
+          <meetingKey>${a}</meetingKey>
         <order>
           <orderBy>STARTTIME</orderBy>
+        
         </order>
       </bodyContent>
     </body>
   </serv:message>`,
-    json: true, // Automatically stringifies the body to JSON
     headers: {
       'postman-token': '87544b87-0ab3-cfe6-cf86-ef2bab10e900',
       'cache-control': 'no-cache'
     }
   };
   rp(options).then(function (body) {
-      var getxml = body;
-      parseString(getxml, function (err, result) {
-        console.log("-----get");
-        session.send(JSON.stringify(result));
-        return JSON.stringify(result);
-      });
+      console.log("-----------------boddy xml");
+      console.log(body);
+      var xml = body;
+
+      const ast = XmlReader.parseSync(xml);
+      const xq = xmlQuery(ast);
+
+      var meetingKeyX = xmlQuery(ast).find('meet:meetingKey').text();
+      var confNameX = xmlQuery(ast).find('meet:confName').text();
+      var startDateN = xmlQuery(ast).find('meet:startDate').text();
+      // var meetingKeyX = xmlQuery(ast).find('meet:meetingKey').text();
+
     })
     .catch(function (err) {
       console.log(err);
@@ -112,19 +113,5 @@ GetUpdateMember = function (session) {
     });
 }
 
-module.exports.GetUpdateMember = GetUpdateMember;
+module.exports.getUpdateMember = getUpdateMember;
 module.exports.sendUpdateMember = sendUpdateMember;
-
-// function getUpdateResults(searchString) {
-//   var options = {
-//     method: 'GET',
-//     uri: 'https://api.giphy.com/v1/gifs/translate',
-//     qs: {
-//       s: searchString,
-//       api_key: '9n8AIaWULVu37sA1k8eE38IwnCCjmXP9'
-//     }
-//   }
-//   return rp(options);
-// }
-
-// ----------------------------------------------------------
