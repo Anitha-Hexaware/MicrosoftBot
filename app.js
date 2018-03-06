@@ -31,7 +31,7 @@ server.get('/meeting', (req, res, next) => {
  var a = 622599639;
  var arrEmail = "hani@gmail.com;eii@gmail.com";
  var arrEmailForm = Array.from(arrEmail.split(';'));
- var arrList =[];
+ var arrList ='';
  arrEmailForm.forEach(function (membersEmail) {
  arrList += `<attendee>
  <person>
@@ -41,7 +41,7 @@ server.get('/meeting', (req, res, next) => {
  // console.log(arrList);
 
  });
- console.log(arrList);
+ console.log('The value is ' + arrList);
  // console.log(arrEmailForm[0]);
  var resul = res.send(RSMeetingIm.sendUpdateMember(a,arrList));
 
